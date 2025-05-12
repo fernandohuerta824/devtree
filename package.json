@@ -1,19 +1,31 @@
 {
   "name": "devtree-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "DevTree será un clon de Linktree: una plataforma que permitirá a los usuarios crear una página pública con enlaces personalizados a sus redes sociales y contenido.",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fernandohuerta824/devtree.git"
   },
-  "author": "",
+  "author": "Fernando Huerta",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/fernandohuerta824/devtree/issues"
   },
-  "homepage": "https://github.com/fernandohuerta824/devtree#readme"
+  "homepage": "https://github.com/fernandohuerta824/devtree#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
 }
