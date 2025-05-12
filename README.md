@@ -63,8 +63,8 @@ El frontend se desarrollará en un **repositorio separado**, utilizando React y 
 
 - [x] Inicializar el repositorio
 - [x] Configurar el entorno de desarrollo
+- [x] Añadir la conexión a la base de datos
 - [ ] Establecer las primeras rutas de la API
-- [ ] Añadir la conexión a la base de datos
 - [ ] Permitir el registro de usuarios
 - [ ] Añadir la autenticación de usuarios
 
@@ -83,6 +83,7 @@ Se añadiran más tareas a medida que se avance en el desarrollo del proyecto.
 │   ├── middlewares/ # Middlewares de Express
 │   ├── config/ # Configuración de la aplicación
 │   ├── utils/ # Funciones utilitarias
+│   ├── types/ # Tipos de datos
 ├── .env.example # Ejemplo de archivo .env
 ├── .gitignore # Archivos y carpetas a ignorar por git
 ├── package.json # Dependencias y scripts del proyecto
@@ -90,7 +91,7 @@ Se añadiran más tareas a medida que se avance en el desarrollo del proyecto.
 ```
 
 ## 🧑🏾 Autor
-- **[Fernando Huerta]** - [[Tu GitHub](https://github.com/fernandohuerta824)]
+- **Fernando Huerta** - [https://github.com/fernandohuerta824]
 
 
 
