@@ -4,7 +4,7 @@
         "rootDir": "./src", // Define the root directory of the source files
         "lib": ["ESNext"], // Specify the library files to be included in the compilation, this means we can use the latest ES features
         "target": "ESNext", // Specify the target ECMAScript version for the output files, this means the source code will be compiled to the latest ECMAScript version
-        "moduleResolution": "NodeNext", // Specify the module resolution strategy, this means we will use Node's module resolution algorithm
+        "moduleResolution": "nodenext", // Specify the module resolution strategy, this means we will use Node's module resolution algorithm
         "module": "NodeNext", // Specify the module system to be used, this means we will use Node's module system
         "strict": true, // Set to true to enable all strict type-checking options to get better type safety
         "sourceMap": true, // Generate source maps for the compiled files, this means we will not generate source maps

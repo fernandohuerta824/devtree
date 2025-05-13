@@ -64,8 +64,9 @@ El frontend se desarrollará en un **repositorio separado**, utilizando React y 
 - [x] Inicializar el repositorio
 - [x] Configurar el entorno de desarrollo
 - [x] Añadir la conexión a la base de datos
-- [ ] Establecer las primeras rutas de la API
-- [ ] Permitir el registro de usuarios
+- [x] Crear el modelo de usuario
+- [x] Establecer las primeras rutas de la API
+- [x] Permitir el registro de usuarios
 - [ ] Añadir la autenticación de usuarios
 
 Se añadiran más tareas a medida que se avance en el desarrollo del proyecto.
