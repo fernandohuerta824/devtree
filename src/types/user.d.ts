@@ -1,10 +1,6 @@
-export interface User {
+export interface IUser {
     name: string
     email: string
     password: string
     handle: string
 }
-
-export interface RegisterUser extends User {
-    confirmPassword: string
-} 

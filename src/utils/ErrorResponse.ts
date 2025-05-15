@@ -1,3 +1,5 @@
+import { ValidationErrors } from "../types/error";
+
 export class ErrorResponse extends Error {
     public status: number
     public name: string
@@ -14,8 +16,9 @@ export class ErrorResponse extends Error {
 }
 
 export class ValidationResponseError extends ErrorResponse {
-    public errors: Record<string, string>
-    constructor(name: string, errors: Record<string, string>, message = 'One or more validation errors') {
+    public errors: ValidationErrors
+
+    constructor(name: string, errors: ValidationErrors, message = 'One or more validation errors') {
         super(name, message, 422)
         this.errors = errors
 

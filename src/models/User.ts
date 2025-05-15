@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { User } from "../types/user";
+import { IUser } from "../types/user";
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -27,6 +27,6 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
 })
-const User = mongoose.model<User>('User', userSchema, 'users')
+const User = mongoose.model<IUser>('User', userSchema, 'users')
 
 export default User

@@ -1,5 +1,6 @@
 import { body, validationResult } from "express-validator";
 import type { Request } from "express";
+import { ValidationErrors } from "../types/error";
 
 
 export const validateName = body('name')
@@ -74,30 +75,31 @@ export const validatePassword = body('password')
 
 export const validationErrors = (req: Request) : {
     isEmpty: false
-    errors: Record<string, string>
+    errors: ValidationErrors
 } | {
     isEmpty: true
-    errors: null    
+    errors: []
 } => {
     const errors = validationResult(req)
     const isEmpty = errors.isEmpty()
     if (!isEmpty) {
-        const formattedErrors = errors.array().reduce((acc, err) => {
-            if ('path' in err && 'msg' in err) {
-                acc[err.path] = err.msg;
-            }
-            return acc;
-        }, {} as Record<string, string>);
         return {
             isEmpty,
-            errors: formattedErrors
+            errors: errors.array().map((err) => {
+                if ('path' in err && 'msg' in err) {
+                    return [err.path, err.msg as string]
+                }
+                return ['error', err.msg]
+                
+            })
+
         }
 
     }
 
     return {
         isEmpty,
-        errors: null
+        errors: []
     }
 }
     
