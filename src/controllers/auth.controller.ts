@@ -1,12 +1,17 @@
 import type { NextFunction, Request, Response } from "express";
-import { IUser } from "../types/user";
+import { IUser, LoginUser } from "../types/user";
 import User from "../models/User";
-import { hashPassword } from "../utils/auth";
+import { existsUser, hashPassword, verifyPassword } from "../utils/auth";
 import slugify from "slugify";
+import { UnauthorizedResponseError } from "../utils/ErrorResponse";
 
 
-export const registerController = async (req: Request<{}, {}, IUser>, res: Response) => {
+export const registerController = async (
+    req: Request<{}, {}, IUser>, 
+    res: Response
+) => {
     const { email, handle, name, password } = req.body
+
     const hashedPassword = await hashPassword(password)
 
     const userSlug = slugify(handle)
@@ -23,4 +28,11 @@ export const registerController = async (req: Request<{}, {}, IUser>, res: Respo
             handle: user.handle
         }
     })  
+}
+
+export const login = async (
+    req: Request<{}, {}, IUser>, 
+    res: Response
+) => {
+    res.json({message: 'All working'})
 }

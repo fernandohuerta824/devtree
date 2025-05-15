@@ -1,17 +1,27 @@
 import { Router } from "express";
-import { registerController } from '../controllers/auth.controller'
+import { login, registerController } from '../controllers/auth.controller'
 import { validateHandle, validateEmail, validatePassword, validateName } from "../utils/routeValidations";
-import { handleValidationErrors , validateExistingUser } from "../middleware/auth";
+import { handleValidationErrors , validateExistingUserLogin, validateExistingUserRegister } from "../middleware/auth";
+import { checkValidFields } from "../middleware/checkValidFields";
 
 const authRoutes = Router()
 
 authRoutes.post('/register',
+    checkValidFields(['password', 'email', 'handle', 'confirmPassword', 'name']),
     validateHandle,
     validateEmail,
-    validatePassword,
+    validatePassword(),
     validateName,
-    handleValidationErrors ,
-    validateExistingUser
-, registerController)
+    handleValidationErrors({ type: 'unprocessable' }) ,
+    validateExistingUserRegister,
+registerController)
+
+authRoutes.post('/login', 
+    checkValidFields(['password', 'email']),
+    validateEmail,
+    validatePassword(true),
+    handleValidationErrors({ type: 'unauthorized', fallBack: 'The email or password is wrong' }),
+    validateExistingUserLogin,
+login)
 
 export default authRoutes

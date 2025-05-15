@@ -5,7 +5,7 @@ import { ErrorResponse } from './utils/ErrorResponse'
 
 const app = express()
 
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '10kb' }))
 app.use('/auth', authRoutes)
 
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -22,7 +22,7 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
               error.status || 500
         );
     res.status(err.status).json({
-        ...err
+        ...err,
     })
 })
 

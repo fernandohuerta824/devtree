@@ -1,30 +1,36 @@
 import type { NextFunction, Request, Response } from "express";
-import { ValidationResponseError } from "../utils/ErrorResponse";
-import { IUser } from "../types/user";
+import { UnauthorizedResponseError, ValidationResponseError } from "../utils/ErrorResponse";
+import { IUser, LoginUser } from "../types/user";
 import { validationErrors } from "../utils/routeValidations";
 import slugify from 'slugify'
-import User from "../models/User";
-import { ValidationErrors } from "../types/error";
+import { TypeErrors, ValidationErrors } from "../types/error";
 import { existsUser } from "../utils/auth";
+import { verifyPassword } from "../utils/auth";
 
 
-export function handleValidationErrors (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) {
-    const { isEmpty, errors } = validationErrors(req)
-        if(!isEmpty) {
-            throw new ValidationResponseError(
-            'ValidationUserRegisterError', 
-            errors
-        )
+export function handleValidationErrors ({type = 'unprocessable', fallBack} : {type: TypeErrors, fallBack?: string}) {
+    return ( 
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => {
+        const { isEmpty, errors } = validationErrors(req)
+
+        if(!isEmpty && type === 'unprocessable') {
+            throw new ValidationResponseError(                 
+                errors,
+                fallBack
+            )
+        }
+
+        if(!isEmpty && type === 'unauthorized') {
+            throw new UnauthorizedResponseError(fallBack)
+        }
+        next()
     }
-
-    next()
 }
 
-export async function validateExistingUser(
+export async function validateExistingUserRegister(
     req: Request<{}, {}, IUser>,
     res: Response,
     next: NextFunction
@@ -45,10 +51,32 @@ export async function validateExistingUser(
         }
     
         throw new ValidationResponseError(
-            'ValidationUserRegisterError', 
             errors,
         )
     }
 
+    next()
+}
+
+export async function validateExistingUserLogin(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    const { email, password } = req.body as LoginUser
+
+    const user = await existsUser({email})
+
+    if(!user) {
+        throw new UnauthorizedResponseError('The email or password is wrong')
+    }
+
+    const matchPassword = await verifyPassword(password, user.password)
+        
+    if(!matchPassword) {
+        throw new UnauthorizedResponseError('The email or password is wrong')
+    }
+
+    req.body = user
     next()
 }

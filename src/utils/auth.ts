@@ -7,13 +7,19 @@ export const hashPassword = async (passwordToHash: string) => {
     return bcrypt.hash(passwordToHash, salt)
 }
 
+export const verifyPassword = (password: string, hashedPassword: string) => {
+2
+    
+    return bcrypt.compare(password, hashedPassword)
+}
+
 export const existsUser = async ({ email, handle }: { email?: string, handle?: string }) => {
     const user = await User.findOne(
         { $or: [ 
             { email },
             { handle, } 
-        ]}, 
-        { _id: true, email: true, handle: true }
+        ]},
+        { __v: false }
     )
 
     return user

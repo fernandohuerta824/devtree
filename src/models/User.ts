@@ -1,7 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IUser } from "../types/user";
 
 const userSchema = new mongoose.Schema({
+    _id: {
+        type: Schema.ObjectId,
+    },
     name: {
         type: String,
         required: true,
@@ -17,7 +20,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        lowercase: true
     },
     handle: {
         type: String,
