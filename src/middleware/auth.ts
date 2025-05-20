@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { UnauthorizedResponseError, ValidationResponseError } from "../utils/ErrorResponse";
 import { IUser, LoginUser } from "../types/user";
-import { validationErrors } from "../utils/routeValidations";
+import { setErrorValidation, validationErrors } from "../utils/routeValidations";
 import slugify from 'slugify'
 import { TypeErrors, ValidationErrors } from "../types/error";
 import { existsUser } from "../utils/auth";
@@ -42,12 +42,12 @@ export async function validateExistingUserRegister(
     const user = await existsUser({email, handle: userSlug})
 
     if(user) {
-        const errors: ValidationErrors  = []
+        const errors: ValidationErrors = {}
         if(user.email === email) {
-            errors.push(['email', 'Email already exists'])
+            errors.email = setErrorValidation('alreadyExist', 'The email already exists')
         }
         if(user.handle === userSlug) {
-            errors.push(['handle', 'Handle already exists'])
+            errors.handle = setErrorValidation('alreadyExist', 'The handle already exists')
         }
     
         throw new ValidationResponseError(

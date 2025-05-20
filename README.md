@@ -37,7 +37,7 @@ En este repositorio es donde se encuentra y se desarrollará el backend de la ap
 
 El frontend se desarrollará en un **repositorio separado**, utilizando React y Tailwind CSS. Se conectará a esta API.
 
-> 🔗 [Repositorio del frontend](#) _(próximamente disponible)_
+> 🔗 [https://github.com/fernandohuerta824/devtree-front-end](https://github.com/fernandohuerta824/devtree-front-end)
 
 ## 🚀 Instalación
 1. Clona el repositorio:

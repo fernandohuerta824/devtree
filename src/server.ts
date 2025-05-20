@@ -1,10 +1,13 @@
 import express, { NextFunction, Request, Response } from 'express'
+import cors from 'cors'
 import authRoutes from './routes/auth.routes'
 import bodyParser from 'body-parser'
 import { ErrorResponse } from './utils/ErrorResponse'
+import { corsConfig } from './config/cors'
 
 const app = express()
 
+app.use(cors(corsConfig))
 app.use(bodyParser.json({ limit: '10kb' }))
 app.use('/auth', authRoutes)
 

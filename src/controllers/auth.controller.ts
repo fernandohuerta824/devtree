@@ -1,9 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
-import { IUser, LoginUser } from "../types/user";
+import { IUser } from "../types/user";
 import User from "../models/User";
-import { existsUser, hashPassword, verifyPassword } from "../utils/auth";
+import { hashPassword } from "../utils/auth";
 import slugify from "slugify";
-import { UnauthorizedResponseError } from "../utils/ErrorResponse";
+import mongoose from "mongoose";
 
 
 export const registerController = async (
@@ -15,7 +15,7 @@ export const registerController = async (
     const hashedPassword = await hashPassword(password)
 
     const userSlug = slugify(handle)
-    const user = new User({email, name, password: hashedPassword, handle: userSlug,})
+    const user = new User({_id: new mongoose.Types.ObjectId(), email, name, password: hashedPassword, handle: userSlug})
 
     await user.save()
 

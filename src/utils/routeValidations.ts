@@ -2,62 +2,68 @@ import { body, validationResult } from "express-validator";
 import type { Request } from "express";
 import { ValidationErrors } from "../types/error";
 
+export const setErrorValidation = (type = 'validationError', message = 'Validation Error') => {
+    return {
+        type,
+        message
+    }
+}
+
 export const validateName = body("name")
     .notEmpty()
-    .withMessage("The name is required")
+    .withMessage(setErrorValidation('required', 'The name is required'))
     .bail()
-    .isLength({ min: 3, max: 20 })
-    .withMessage("The name must be between 3 and 20 characters long")
+    .isLength({ min: 3 })
+    .withMessage(setErrorValidation('minLength', "The name must be at least 3 characters long"))
     .bail()
-    .trim();
+    .isLength({ max: 20 })
+    .withMessage(setErrorValidation('maxLength', "The name must be max 20 characters long"))
 
 export const validateHandle = body("handle")
     .notEmpty()
-    .withMessage("The handle is required")
+    .withMessage(setErrorValidation('required', "The handle is required"))
     .bail()
-    .isLength({ min: 3, max: 20 })
-    .withMessage("The handle must be between 3 and 20 characters long")
-    .bail();
+    .isLength({ min: 3 })
+    .withMessage(setErrorValidation('minLength', "The handle must be at least 3 characters long"))
+    .bail()
+    .isLength({ max: 20 })
+    .withMessage(setErrorValidation('maxLength', "The handle must be max 20 characters long"))
 
 export const validateEmail = body("email")
     .notEmpty()
-    .withMessage("The email is required")
+    .withMessage(setErrorValidation('required', 'The email is required'))
     .bail()
     .isEmail()
-    .withMessage("The email is not valid")
+    .withMessage(setErrorValidation('required', 'The email is not valid'))
     .bail()
     .normalizeEmail();
 
 export const validatePassword = (login = false) => {
     const validation = body("password")
         .notEmpty()
-        .withMessage("The password is required")
+        .withMessage(setErrorValidation('required', "The password is required"))
         .bail()
-        .isLength({ min: 8, max: 40 })
-        .withMessage("The password must be between 8 and 40 characters long")
+        .isLength({ min: 8 })
+        .withMessage(setErrorValidation('minLength', "The password must be at least 8 characters long"))
+        .bail()
+        .isLength({ max: 40 })
+        .withMessage(setErrorValidation('maxLength', "The password must be max 40 characters long"))
         .bail()
         .trim()
         .isAlphanumeric()
-        .withMessage("The password must contain only letters and numbers")
+        .withMessage(setErrorValidation('alphanumeric', "The password must contain only letters and numbers"))
         .custom((value) => {
             if (!/[a-z]/.test(value)) {
-                throw new Error(
-                    "The password must contain at least one lowercase letter",
-                );
+                throw setErrorValidation('lowerRequired', "The password must contain at least one lowercase letter");
             }
             if (!/[A-Z]/.test(value)) {
-                throw new Error(
-                    "The password must contain at least one uppercase letter",
-                );
+                throw setErrorValidation('upperRequired', "The password must contain at least one uppercase letter");
             }
             if (!/[0-9]/.test(value)) {
-                throw new Error(
-                    "The password must contain at least one number",
-                );
+                throw setErrorValidation('numberRequired', "The password must contain at least one number");
             }
-
             if (value.includes(" ")) {
-                throw new Error("The password must not contain spaces");
+                throw setErrorValidation('spaceNotRequired', "The password must not contain spaces");
             }
             return true;
         })
@@ -66,16 +72,12 @@ export const validatePassword = (login = false) => {
         validation
             .custom(async (value, { req }) => {
                 const { confirmPassword } = req.body;
-
                 if (value !== confirmPassword) {
-                    throw new Error(
-                        "The password confirmation does not match the password",
-                    );
+                    throw setErrorValidation('doNotMatch', "The password confirmation does not match the password");
                 }
                 return true;
             });
     }
-
     return validation
 };
 
@@ -84,24 +86,29 @@ export const validationErrors = (req: Request): {
     errors: ValidationErrors;
 } | {
     isEmpty: true;
-    errors: [];
+    errors: {};
 } => {
-    const errors = validationResult(req);
-    const isEmpty = errors.isEmpty();
+    const errorsResult = validationResult(req);
+    const isEmpty = errorsResult.isEmpty();
+    const errors: ValidationErrors = {}
+    errorsResult.array().forEach(error => {
+        if('path' in error && 'msg' in error) {
+            errors[error.path] = {
+                type: error.msg.type || 'unknowm',
+                message: error.msg.message || 'Validation Error'
+            }
+        }
+    })
+    
     if (!isEmpty) {
         return {
             isEmpty,
-            errors: errors.array().map((err) => {
-                if ("path" in err && "msg" in err) {
-                    return [err.path, err.msg as string];
-                }
-                return ["error", err.msg];
-            }),
+            errors,
         };
     }
 
     return {
         isEmpty,
-        errors: [],
+        errors: {},
     };
 };

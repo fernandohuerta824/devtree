@@ -4,5 +4,6 @@ declare namespace NodeJS {
     PORT: string|undefined
     HOST: string|undefined
     MONGODB_NAME: string
+    FRONTEND_URL: string
   }
 }
