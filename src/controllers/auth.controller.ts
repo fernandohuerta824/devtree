@@ -4,6 +4,7 @@ import User from "../models/User";
 import { hashPassword } from "../utils/auth";
 import slugify from "slugify";
 import mongoose from "mongoose";
+import { generateJWT } from "../config/jwt";
 
 
 export const registerController = async (
@@ -34,5 +35,9 @@ export const login = async (
     req: Request<{}, {}, IUser>, 
     res: Response
 ) => {
-    res.json({message: 'All working'})
+    const { _id } = req.body
+    const token = generateJWT({
+        _id
+    })
+    res.json({token})
 }

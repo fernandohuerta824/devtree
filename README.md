@@ -67,7 +67,7 @@ El frontend se desarrollará en un **repositorio separado**, utilizando React y 
 - [x] Crear el modelo de usuario
 - [x] Permitir el registro de usuarios
 - [x] Añadir la autenticación de usuarios
-- [ ] Añadir JWT para la autenticación
+- [x] Añadir JWT para la autenticación
 
 Se añadiran más tareas a medida que se avance en el desarrollo del proyecto.
 
