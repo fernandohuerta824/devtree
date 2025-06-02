@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import jwt, { JsonWebTokenError } from 'jsonwebtoken'
 import { UnauthorizedResponseError, ValidationResponseError } from "../utils/ErrorResponse";
 import { IUser, LoginUser } from "../types/user";
 import { setErrorValidation, validationErrors } from "../utils/routeValidations";
@@ -6,6 +7,8 @@ import slugify from 'slugify'
 import { TypeErrors, ValidationErrors } from "../types/error";
 import { existsUser } from "../utils/auth";
 import { verifyPassword } from "../utils/auth";
+import User from "../models/User";
+import {} from './../types/express'
 
 
 export function handleValidationErrors ({type = 'unprocessable', fallBack} : {type: TypeErrors, fallBack?: string}) {
@@ -79,4 +82,35 @@ export async function validateExistingUserLogin(
 
     req.body = user
     next()
+}
+
+export const isAuth = async  (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const bearer = req.headers.authorization
+    
+        if(!bearer) {
+            throw new UnauthorizedResponseError()
+        }
+    
+        const token = bearer.split(' ')[1]
+        const jwtSecret = process.env.JWT_SECRET as jwt.Secret
+    
+        const userToken = jwt.verify(token, jwtSecret) as Pick<IUser, '_id'> & {iat: number, exp: number}
+        const user = await User.findById(userToken._id)
+        if(new Date(Date.now()) >= new Date(userToken.exp * 1000)) {
+            throw new UnauthorizedResponseError()
+        }
+        if(!user) {
+            throw new UnauthorizedResponseError()
+        }
+
+        req.user = user
+        next()
+    } catch (error) {
+        if(error instanceof JsonWebTokenError  || error instanceof SyntaxError) {
+            throw new UnauthorizedResponseError()
+        }
+
+        throw error
+    }
 }

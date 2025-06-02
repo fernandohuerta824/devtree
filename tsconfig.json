@@ -9,8 +9,8 @@
         "strict": true, // Set to true to enable all strict type-checking options to get better type safety
         "sourceMap": true, // Generate source maps for the compiled files, this means we will not generate source maps
         "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules, this means we can use both module systems together
-        "declaration": true // Generates corresponding '.d.ts' files for the compiled files, this means we will generate declaration files
-
+        "declaration": true, // Generates corresponding '.d.ts' files for the compiled files, this means we will generate declaration files
+        "typeRoots": ["./node_modules/@types", "./src/types"]
         
     },
     "include": ["src/**/*.ts"],
