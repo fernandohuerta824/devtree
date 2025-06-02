@@ -96,10 +96,12 @@ export const isAuth = async  (req: Request, res: Response, next: NextFunction) =
         const jwtSecret = process.env.JWT_SECRET as jwt.Secret
     
         const userToken = jwt.verify(token, jwtSecret) as Pick<IUser, '_id'> & {iat: number, exp: number}
+
         const user = await User.findById(userToken._id)
         if(new Date(Date.now()) >= new Date(userToken.exp * 1000)) {
             throw new UnauthorizedResponseError()
         }
+        
         if(!user) {
             throw new UnauthorizedResponseError()
         }
