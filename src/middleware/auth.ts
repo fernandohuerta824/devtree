@@ -40,7 +40,7 @@ export async function validateExistingUserRegister(
 ) {
 
     const { email, handle } = req.body
-    const userSlug = slugify(handle)
+    const userSlug = slugify(handle).toLowerCase()
     
     const user = await existsUser({email, handle: userSlug})
 

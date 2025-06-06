@@ -41,3 +41,11 @@ export const login = async (
     })
     res.json({token})
 }
+
+export const logout = async (
+    req: Request<{}, {}, Pick<IUser, '_id'>>,
+    res: Response
+) => {
+    const bearer = req.headers.authorization
+
+}

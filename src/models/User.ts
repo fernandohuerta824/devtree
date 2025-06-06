@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         unique: true
     },
+    description: {
+        type: String,
+        trim: true,
+        default: ''
+    },
 })
 const User = mongoose.model<IUser>('User', userSchema, 'users')
 

@@ -6,6 +6,7 @@ export interface IUser {
     email: string
     password: string
     handle: string
+    description: string
 }
 
 export interface LoginUser {

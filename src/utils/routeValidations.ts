@@ -19,6 +19,10 @@ export const validateName = body("name")
     .isLength({ max: 20 })
     .withMessage(setErrorValidation('maxLength', "The name must be max 20 characters long"))
 
+export const validateDescription = body("name")
+    .isLength({ max: 250 })
+    .withMessage(setErrorValidation('maxLength', 'The description must be at most 250 characters long'))
+
 export const validateHandle = body("handle")
     .notEmpty()
     .withMessage(setErrorValidation('required', "The handle is required"))
