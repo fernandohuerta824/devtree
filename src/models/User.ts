@@ -33,6 +33,16 @@ const userSchema = new mongoose.Schema({
         trim: true,
         default: ''
     },
+    image: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    image_id: {
+        type: String,
+        trim: true,
+        default: ''
+    }
 })
 const User = mongoose.model<IUser>('User', userSchema, 'users')
 

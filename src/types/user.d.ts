@@ -7,6 +7,8 @@ export interface IUser {
     password: string
     handle: string
     description: string
+    image: string
+    image_id: string
 }
 
 export interface LoginUser {
