@@ -11,7 +11,7 @@ userRoutes.use(isAuth)
 userRoutes.get('/', getUser)
 
 userRoutes.patch('/', 
-    checkValidFields(['handle', 'description']),
+    checkValidFields(['handle', 'description', 'links']),
     validateHandle,
     validateDescription,
     handleValidationErrors({ type: 'unprocessable' }),

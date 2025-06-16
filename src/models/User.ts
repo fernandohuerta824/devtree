@@ -42,6 +42,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
         default: ''
+    },
+    links: {
+        type: String,
+        default: '[]'
     }
 })
 const User = mongoose.model<IUser>('User', userSchema, 'users')

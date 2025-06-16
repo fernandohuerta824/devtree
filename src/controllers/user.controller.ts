@@ -15,17 +15,18 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
         email: user?.email,
         name: user?.name,
         description: user?.description,
-        image: user?.image
+        image: user?.image,
+        links: user?.links
     }})
 }
 
 export const updateUserProfile = async (
-    req: Request<{}, {}, Pick<IUser, 'description' | 'handle'>>, 
+    req: Request<{}, {}, Pick<IUser, 'description' | 'handle' | 'links'>>, 
     res: Response, 
     next: NextFunction
 ) => {
     const user = req.user!
-    const { description, handle } = req.body
+    const { description, handle, links} = req.body
     const slug = slugify(handle).toLowerCase()
 
     const existingUser = await User.findOne({handle : slug})
@@ -41,6 +42,7 @@ export const updateUserProfile = async (
     
     user.handle = slug
     user.description = description
+    user.links = links
     await user.save()
 
     res.json({message: 'User has been updated successfully', user: {
@@ -49,7 +51,8 @@ export const updateUserProfile = async (
         email: user.email,
         handle: user.handle,
         description: user.description,
-        image: user.image
+        image: user.image,
+        links: user.links
     }})
 }  
 
@@ -71,13 +74,13 @@ export const uploadImage = async (
         }
         const user = req.user!
      
-        await cloudinary.uploader.destroy(user.image_id)
-
+        
         cloudinary.uploader.upload(filePath, {}, async (error, result) => {
             if(error) {
                 return next(new ErrorResponse("Error","Error at trying to updload the image"))
             }
             
+            cloudinary.uploader.destroy(user.image_id)
             user.image = result?.secure_url!
             user.image_id = result?.public_id!
 

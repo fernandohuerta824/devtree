@@ -9,6 +9,7 @@ export interface IUser {
     description: string
     image: string
     image_id: string
+    links: string
 }
 
 export interface LoginUser {
