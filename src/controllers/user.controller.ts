@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
 import {} from './../types/express'
-import { IUser } from '../types/user'
+import { IUser, SocialNetwork } from '../types/user'
 import slugify from 'slugify'
 import formidable from 'formidable'
 import User from '../models/User'
@@ -89,4 +89,40 @@ export const uploadImage = async (
             res.status(201).json({ message: 'Image uploaded successfully', image: user.image })
         })
     })
+}
+
+export const getUserByHandle = async (
+    req: Request<{ handle: string}>, 
+    res: Response, 
+    next: NextFunction
+) => {
+    const { handle } = req.params
+
+    const user = await User.findOne(
+        { handle }, 
+        { 
+            password: false, 
+            __v: false ,
+            email: false,
+            image_id: false,
+            _id: false
+        }
+    )
+
+    if(!user) {
+        throw new ErrorResponse('NotFound', 'The user you are trying to view does not exist or account not available', 404 )
+    }
+
+    const links = JSON.parse(user.links)
+        .filter((l: SocialNetwork) => l.enabled)
+        .sort((a: SocialNetwork, b: SocialNetwork) => a.id - b.id)
+    
+    res.json({user: {
+        name: user.name,
+        email: user.email,
+        handle: user.handle,
+        description: user.description,
+        image: user.image,
+        links
+    }})
 }

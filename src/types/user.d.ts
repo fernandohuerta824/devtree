@@ -16,3 +16,10 @@ export interface LoginUser {
     email: string
     password: string
 }
+
+export type SocialNetwork = {
+    id: number,
+    name: string
+    url: string
+    enabled: boolean
+}
